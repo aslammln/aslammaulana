@@ -1,0 +1,6 @@
+{
+  "name": "Personal Portfolio Website",
+  "description": "Website portofolio pribadi serbaguna dengan panel admin terintegrasi sesuai PRD.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
