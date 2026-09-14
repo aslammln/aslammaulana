@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Lock } from 'lucide-react';
 import { Profile } from '../../types';
 
 interface HeaderProps {
   profile: Profile;
+  onNavigateAdmin?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ profile }) => {
+export const Header: React.FC<HeaderProps> = ({ profile, onNavigateAdmin }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollTo = (id: string) => {
@@ -40,20 +41,44 @@ export const Header: React.FC<HeaderProps> = ({ profile }) => {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollTo(link.id)}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
-              >
-                {link.label}
-              </button>
-            ))}
-          </nav>
+          <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
+            <nav className="flex items-center space-x-1 lg:space-x-2">
+              {navLinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="px-3 py-1.5 rounded-lg text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
+                >
+                  {link.label}
+                </button>
+              ))}
+            </nav>
+
+            {onNavigateAdmin && (
+              <div className="pl-2 border-l border-neutral-200">
+                <button
+                  onClick={onNavigateAdmin}
+                  title="Panel Admin (/admin/login)"
+                  className="p-2 rounded-lg text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+                  aria-label="Panel Admin"
+                >
+                  <Lock className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden">
+          <div className="flex md:hidden items-center gap-1">
+            {onNavigateAdmin && (
+              <button
+                onClick={onNavigateAdmin}
+                className="p-2 rounded-lg text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100"
+                title="Login Admin"
+              >
+                <Lock className="w-4 h-4" />
+              </button>
+            )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none"
@@ -77,6 +102,20 @@ export const Header: React.FC<HeaderProps> = ({ profile }) => {
               {link.label}
             </button>
           ))}
+          {onNavigateAdmin && (
+            <div className="pt-2 border-t border-neutral-100">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigateAdmin();
+                }}
+                className="flex items-center gap-2 w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-blue-600 hover:bg-blue-50 transition-colors"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Masuk ke Panel Admin</span>
+              </button>
+            </div>
+          )}
         </div>
       )}
     </header>
